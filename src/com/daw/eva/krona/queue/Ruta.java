@@ -60,7 +60,7 @@ public class Ruta {
 		}
 		
 		wtmp = new Waypoint_Dades(4, "Òrbita de Júpiter REPETIDA", new int[] {4,4,4}, true, LocalDateTime.parse("21-10-2020 00:30", Data.formatter), null, LocalDateTime.parse("22-10-2020 23:55", Data.formatter));
-		comprovacioRendimentTmp.pilaWaypoints.addFirst(wtmp);
+		comprovacioRendimentTmp.pilaWaypoints.addFirst(wtmp);   // a sobre la pila, sobre el 7
 		comprovacioRendimentTmp.wtmp = wtmp;
 		
 		
@@ -73,8 +73,10 @@ public class Ruta {
 		System.out.println("La ruta està formada pels waypoints:");
 		
 		for (Waypoint_Dades waypointTmp : comprovacioRendimentTmp.pilaWaypoints) {
-			System.out.println(waypointTmp.toString());
+			System.out.println(waypointTmp.toString());   //llegeix de damunt la pila cap a sota, de final a davant d'una cua-llista...
 		}
+		System.out.println("----------11bis---------");
+		System.out.println(comprovacioRendimentTmp.pilaWaypoints);
 	}
 	
 	
@@ -102,6 +104,9 @@ public class Ruta {
 	public static void existeixWaypointEnRuta(ComprovacioRendiment comprovacioRendimentTmp) {
 		//Iterator it = comprovacioRendimentTmp.pilaWaypoints.descendingIterator();
 		Waypoint_Dades wtmp;
+		boolean isInQueue = false;
+		Waypoint_Dades wp;
+
 		
 		if (comprovacioRendimentTmp.pilaWaypoints.size() == 0) {
 			System.out.println("La ruta està buida.");
@@ -112,12 +117,30 @@ public class Ruta {
 				System.out.println("NO hem trobat el waypoint " + comprovacioRendimentTmp.wtmp.getNom() + " emmagatzemat en comprovacioRendimentTmp.wtmp, en la llista.");
 			}
 			
-			wtmp = new Waypoint_Dades(4, "Òrbita de Júpiter", new int[] {4,4,4}, true, LocalDateTime.parse("21-10-2020 00:30", Data.formatter), null, LocalDateTime.parse("22-10-2020 23:55", Data.formatter));
+			
+			//Si sobre-escrivim el mètode equals, contains i equals, a sota, trobaran el nou punt wtmp. Sino, donarà fals, sempre, el  mètode contains... cal sobre-escriure'l
+			
+			wtmp = new Waypoint_Dades(4, "Òrbita de Júpiter Ruepe", new int[] {4,4,4}, true, LocalDateTime.parse("21-10-2020 00:30", Data.formatter), null, LocalDateTime.parse("22-10-2020 23:55", Data.formatter));
 			if (comprovacioRendimentTmp.pilaWaypoints.contains(wtmp)) {
 				System.out.println("SI hem trobat el waypoint " + wtmp.getNom() + " creat ara mateix, en la llista.");
 			} else {
 				System.out.println("NO hem trobat el waypoint " + wtmp.getNom() + " creat ara mateix, en la llista.");
 			}
+			
+			isInQueue = false;
+			// Do the same with the new wtmp waypoint
+			while ((!isInQueue) && (!comprovacioRendimentTmp.pilaWaypoints.isEmpty())) {
+				wp = comprovacioRendimentTmp.pilaWaypoints.pop();
+				if (wp.equals(wtmp)) {
+					isInQueue = true;
+				}
+			}
+			if (isInQueue) {
+				System.out.println("El waypoint wtmp està a la cua.");
+			} else {
+				System.out.println("El waypoint wtmp no està a la cua.");
+			}
+
 		}
 		
 		//pilaWaypoints.
